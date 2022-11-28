@@ -10,9 +10,22 @@ import Html.Attributes as A
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import Random exposing (Seed)
 import Shared
 import Time exposing (Month(..))
 import View exposing (View)
+
+
+fakeBit : String
+fakeBit =
+    List.foldr
+        (\_ ( prevBits, prevSeed ) ->
+            Random.step (Random.int 0 9) prevSeed
+                |> Tuple.mapFirst (String.fromInt >> (++) prevBits)
+        )
+        ( "", Random.initialSeed 0 )
+        (List.range 0 100)
+        |> Tuple.first
 
 
 type alias Model =
@@ -88,6 +101,18 @@ view _ _ _ =
             [ A.class "index-page"
             ]
             [ H.div
+                [ A.class "infinite-scroll"
+                ]
+                [ H.div
+                    [ A.class "infinite-scroll__content infinite-scroll__content--1" ]
+                    [ H.text fakeBit
+                    ]
+                , H.div
+                    [ A.class "infinite-scroll__content infinite-scroll__content--2" ]
+                    [ H.text fakeBit
+                    ]
+                ]
+            , H.div
                 [ A.class "title" ]
                 [ H.text "2022" ]
             , H.div
@@ -131,6 +156,18 @@ view _ _ _ =
                         )
                         december
                 )
+            , H.div
+                [ A.class "infinite-scroll infinite-scroll--fast"
+                ]
+                [ H.div
+                    [ A.class "infinite-scroll__content infinite-scroll__content--1" ]
+                    [ H.text fakeBit
+                    ]
+                , H.div
+                    [ A.class "infinite-scroll__content infinite-scroll__content--2" ]
+                    [ H.text (String.reverse fakeBit)
+                    ]
+                ]
             ]
         ]
     }

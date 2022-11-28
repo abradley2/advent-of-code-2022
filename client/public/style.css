@@ -21,7 +21,7 @@ pre {
 }
 
 .index-page {
-    height: 100vh;
+    height: 80vh;
     width: 100vw;
     display: flex;
     align-items: center;
@@ -30,7 +30,7 @@ pre {
 }
 
 .solution-page {
-    height: 100vh;
+    height: 80vh;
     width: 100vw;
     display: flex;
     align-items: center;
@@ -39,7 +39,7 @@ pre {
 
 .solution-page__back {
     --width: 15rem;
-    color: var(--primary-font-color-hover);
+    color: var(--primary-font-color);
     text-decoration: none;
     font-size: 1.25rem;
     padding: 0.5rem;
@@ -54,7 +54,7 @@ pre {
 }
 
 .solution-page__output {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     text-shadow: var(--primary-text-shadow);
     color: var(--primary-font-color-hover);
 }
@@ -76,7 +76,7 @@ pre {
 
 .calendar {
     padding-top: 1rem;
-    padding-bottom: 5rem;
+    padding-bottom: 1rem;
 }
 
 .calendar__week {
@@ -125,4 +125,60 @@ pre {
     display: block;
     max-width: 20rem;
     word-wrap: break-word;
+}
+
+.infinite-scroll {
+    --infinite-scroll-width: 20rem;
+    --infinite-scroll-duration: 3s;
+    width: var(--infinite-scroll-width);
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    overflow-x: hidden;
+    position: relative;
+    letter-spacing: 0.4rem;
+    color: var(--primary-font-color);
+}
+
+.infinite-scroll--fast {
+    --infinite-scroll-duration: 2s;
+}
+
+.infinite-scroll__content {
+    top: 0%;
+    width: var(--infinite-scroll-width);
+    overflow: hidden;
+    animation-duration: var(--infinite-scroll-duration);
+    animation-iteration-count: infinite;
+    position: absolute;
+    animation-timing-function: linear;
+}
+
+@keyframes infinite-scroll-1 {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 0%;
+    }
+}
+
+.infinite-scroll__content--1 {
+    left: -100%;
+    animation-name: infinite-scroll-1;
+}
+
+@keyframes infinite-scroll-2 {
+    0% {
+        left: 0%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.infinite-scroll__content--2 {
+    left: 0%;
+    animation-name: infinite-scroll-2;
 }
