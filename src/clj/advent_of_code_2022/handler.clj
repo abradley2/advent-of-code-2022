@@ -16,7 +16,7 @@
    [advent-of-code-2022.solutions.day-13 :as day-13]
    [advent-of-code-2022.solutions.day-14 :as day-14]
    [advent-of-code-2022.solutions.day-15 :as day-15]
-   [advent-of-code-2022.solutions.day-17 :as day-16]
+   [advent-of-code-2022.solutions.day-16 :as day-16]
    [advent-of-code-2022.solutions.day-17 :as day-17]
    [advent-of-code-2022.solutions.day-18 :as day-18]
    [advent-of-code-2022.solutions.day-19 :as day-19]
