@@ -24,7 +24,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw")
     (let [input (slurp "resources/input/day_03.txt")]
       (t/is (= 7428 (day-03/part-1 input))))))
 
-(t/deftest day-03-part-1-test
+(t/deftest day-03-part-2-test
   (t/testing "Sample"
     (let [input sample-data]
       (t/is (= 70 (day-03/part-2 input))))))
