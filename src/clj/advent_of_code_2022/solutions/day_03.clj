@@ -1,9 +1,9 @@
 (ns advent-of-code-2022.solutions.day-03
-  (:require
-   advent-of-code-2022.solutions.spec
-   [clojure.string :as str]
-   [clojure.spec.alpha :as s]
-   [clojure.set :as set]))
+  (:require advent-of-code-2022.solutions.spec
+            [clojure.string :as str]
+            [clojure.spec.alpha :as s]
+            [clojure.set :as set]))
+
 
 (def get-priority #(str/index-of "$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" %))
 
@@ -35,8 +35,17 @@
        (reduce + 0)))
 
 (defn part-2
-  [_input]
-  "Not Implemented")
+  [input]
+  (->> (parse-input input)
+       (map #(apply concat %))
+       (map set)
+       (s/assert :spec/partition-by-3)
+       (partition 3)
+       (map #(apply set/intersection %))
+       (map first)
+       (map #(s/assert :spec/count-1 %))
+       (map get-priority)
+       (reduce + 0)))
 
 (def output
   {"Part One" (-> (slurp "resources/input/day_03.txt") part-1)
