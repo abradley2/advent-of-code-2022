@@ -2,13 +2,16 @@
   (:require
    [clojure.test :as t]
    [clojure.spec.test.alpha :as stest]
-   [advent-of-code-2022.solutions.day-02 :as day-02]))
+   [advent-of-code-2022.solutions.day-02 :as day-02]
+   [clojure.spec.alpha :as s]))
 
 (def sample-data "A Y
 B X
 C Z")
 
 (stest/instrument)
+
+(s/check-asserts true)
 
 (t/deftest day-02-part-1-test
   (t/testing "Sample"

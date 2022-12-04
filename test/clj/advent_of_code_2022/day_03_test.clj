@@ -4,7 +4,6 @@
             [advent-of-code-2022.solutions.day-03 :as day-03]
             [clojure.test :as t]))
 
-
 (stest/instrument)
 
 (s/check-asserts true)
@@ -27,4 +26,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw")
 (t/deftest day-03-part-2-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 70 (day-03/part-2 input))))))
+      (t/is (= 70 (day-03/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_03.txt")]
+      (t/is (= 2650 (day-03/part-2 input))))))

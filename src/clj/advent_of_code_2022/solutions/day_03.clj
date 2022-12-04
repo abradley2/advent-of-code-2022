@@ -4,7 +4,6 @@
             [clojure.spec.alpha :as s]
             [clojure.set :as set]))
 
-
 (def get-priority #(str/index-of "$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" %))
 
 (s/fdef partition-rucksack
