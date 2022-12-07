@@ -76,10 +76,6 @@
          (map first)
          (str/join ""))))
 
-; NZZTGBV
-; NZZTGBV
-
-
 (def output
   {"Part One" (-> (slurp "resources/input/day_05.txt") part-1)
    "Part Two" (-> (slurp "resources/input/day_05.txt") part-2)})
