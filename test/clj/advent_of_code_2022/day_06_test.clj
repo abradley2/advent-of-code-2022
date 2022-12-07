@@ -26,10 +26,13 @@
     (let [input (slurp "resources/input/day_06.txt")]
       (t/is (= 1658 (day-06/part-1 input))))))
 
-;; (t/deftest day-06-part-2-test
-;;   (t/testing "Sample A"
-;;     (let [input "mjqjpqmgbljsphdztnvjfqwrcgsmlb"]
-;;       (t/is (= 19 (day-06/part-2 input)))))
-;;   (t/testing "Sample B"
-;;     (let [input "bvwbjplbgvbhsrlpgdmjqwftvncz"]
-;;       (t/is (= 23 (day-06/part-2 input))))))
+(t/deftest day-06-part-2-test
+  (t/testing "Sample A"
+    (let [input "mjqjpqmgbljsphdztnvjfqwrcgsmlb"]
+      (t/is (= 19 (day-06/part-2 input)))))
+  (t/testing "Sample B"
+    (let [input "bvwbjplbgvbhsrlpgdmjqwftvncz"]
+      (t/is (= 23 (day-06/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_06.txt")]
+      (t/is (= 2260 (day-06/part-2 input))))))

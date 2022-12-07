@@ -19,30 +19,18 @@
      [chars all-chars
       idx 0
       stack initial-stack]
-      (if (all-unique initial-stack)
-        idx
-        (recur
-         (rest chars)
-         (inc idx)
-         (as-> stack next-stack
-           (take (dec (count initial-stack)) next-stack)
-           (cons (first chars) next-stack)))))))
-
-(defn part-1
-  [input]
-  (let [all-chars (parse-input input)]
-    (loop
-     [chars all-chars
-      idx 0
-      stack '(nil nil nil nil)]
       (if (all-unique stack)
         idx
         (recur
          (rest chars)
          (inc idx)
          (as-> stack next-stack
-           (take 3 next-stack)
+           (take (dec (count stack)) next-stack)
            (cons (first chars) next-stack)))))))
+
+(defn part-1
+  [input]
+  (run-solution input '(nil nil nil nil)))
 
 (defn part-2
   [input]
