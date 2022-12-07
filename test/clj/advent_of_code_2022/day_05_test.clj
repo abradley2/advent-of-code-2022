@@ -22,4 +22,15 @@ move 1 from 1 to 2")
 (t/deftest day-05-part-1-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= "CMZ" (day-05/part-1 input))))))
+      (t/is (= "CMZ" (day-05/part-1 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_05.txt")]
+      (t/is (= "BWNCQRMDB" (day-05/part-1 input))))))
+
+(t/deftest day-05-part-2-test
+  (t/testing "Sample"
+    (let [input sample-data]
+      (t/is (= "MCD" (day-05/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_05.txt")]
+      (t/is (= "NHWZCBNBF" (day-05/part-2 input))))))

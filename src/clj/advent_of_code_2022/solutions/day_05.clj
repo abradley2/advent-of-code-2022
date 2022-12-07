@@ -6,18 +6,34 @@
             advent-of-code-2022.solutions.spec))
 
 (defn parse-diagram [input]
-  (let [lines (str/split input #"\n")
-        indices (-> (last lines) (util/re-index-map #"\d"))
-        crates (->> (drop-last lines) (map #(util/re-index-map % #"\[(\w)\]")))]
+  (let [indices (->
+                 (last (str/split input #"\n"))
+                 (util/re-index-map #"\d")
+                 (#(zipmap (vals %) (keys %)))
+                 (update-keys read-string)
+                 set/map-invert)
+        crates (->>
+                (drop-last (str/split input #"\n"))
+                (map #(util/re-index-map % #"\[(\w)\]"))
+                (map (fn [line-map] (update-keys line-map #(get indices %))))
+                (reduce #(merge-with list %1 %2) {})
+                (#(update-vals % (comp flatten list))))]
     {:indices indices
-     :crates (->
-              (reduce #(merge-with list %1 %2) {} crates)
-              (update-keys #(read-string (get indices %)))
-              (update-vals (comp flatten list)))}))
+     :crates crates}))
+
+(defn unfold-instruction [instruction]
+  (->> (repeat (:quant instruction) instruction)
+       (map #(assoc % :quant 1))))
+
+(defn unfold-instructions [instructions]
+  (reduce
+   #(concat %1 (unfold-instruction %2))
+   '()
+   instructions))
 
 (defn parse-instruction
   [instruction]
-  (let [[_ quant from to] (re-find #"move\s+(\d)\s+from\s+(\d)\s+to\s+(\d)" instruction)]
+  (let [[_ quant from to] (re-find #"move\s+(\d+)\s+from\s+(\d+)\s+to\s+(\d+)" instruction)]
     {:quant (read-string quant) :from (read-string from) :to (read-string to)}))
 
 (defn parse-input [input]
@@ -39,14 +55,30 @@
 (defn part-1
   [input]
   (let [[diagram instructions] (parse-input input)]
-    (reduce
-     run-instruction
-     (:crates diagram)
-     instructions)))
+    (->> (reduce
+          run-instruction
+          (:crates diagram)
+          (unfold-instructions instructions))
+         (into (sorted-map))
+         vals
+         (map first)
+         (str/join ""))))
 
 (defn part-2
   [input]
-  input)
+  (let [[diagram instructions] (parse-input input)]
+    (->> (reduce
+          run-instruction
+          (:crates diagram)
+          instructions)
+         (into (sorted-map))
+         vals
+         (map first)
+         (str/join ""))))
+
+; NZZTGBV
+; NZZTGBV
+
 
 (def output
   {"Part One" (-> (slurp "resources/input/day_05.txt") part-1)
