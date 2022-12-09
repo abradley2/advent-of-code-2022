@@ -36,4 +36,4 @@ $ ls
 (t/deftest day-07-part-1-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 95437 (day-07/part-1 sample-data))))))
+      (t/is (= 95437 (day-07/part-1 input))))))
