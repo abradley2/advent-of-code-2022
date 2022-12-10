@@ -36,4 +36,15 @@ $ ls
 (t/deftest day-07-part-1-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 95437 (day-07/part-1 input))))))
+      (t/is (= 95437 (day-07/part-1 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_07.txt")]
+      (t/is (= 1648397 (day-07/part-1 input))))))
+
+(t/deftest day-07-part-2-test
+  (t/testing "Sample"
+    (let [input sample-data]
+      (t/is (= 24933642 (day-07/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_07.txt")]
+      (t/is (= 1815525 (day-07/part-2 input))))))

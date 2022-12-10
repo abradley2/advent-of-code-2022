@@ -37,7 +37,13 @@
     terminal))
 
 ; all directories must have their path end in "/"
-(def cap-dir #(if (not= (last (str/split % #"")) "/") (str % "/") %))
+(def cap-dir #(if (str/ends-with? % "/") % (str % "/")))
+
+(defn clean-file-tree [file-tree]
+  (vals (reduce
+         #(assoc %1 (str (:type %2) (:path %2) (:file-name %2)) %2)
+         {}
+         file-tree)))
 
 (defn create-file-tree [terminal]
   (loop
@@ -47,17 +53,17 @@
     next-lines (rest terminal)]
     (if
      (nil? line)
-      files
+      (clean-file-tree files)
       (let [func (->> line (:cmd) (:fn) (s/assert some?))
             out (:out line)
             arg (->> line (:cmd) (:arg) (s/assert (s/or :nil nil? :string string?)))]
         (case func
           "cd" (let [next-root
-                     (case arg
-                       "/" nil
-                       ".." (->> (str/split current-root #"/") drop-last (str/join "/"))
-                       (str current-root arg "/"))]
-                 (recur (if (empty? next-root) "/" (cap-dir next-root))
+                     (cap-dir (case arg
+                                "/" "/"
+                                ".." (->> (str/split current-root #"/") drop-last (str/join "/"))
+                                (str current-root arg "/")))]
+                 (recur next-root
                         (if next-root (cons {:type :dir :path next-root} files) files)
                         (first next-lines)
                         (rest next-lines)))
@@ -73,22 +79,15 @@
                 (rest next-lines))
           (s/assert nil? "Error: func should be either 'cd' or 'ls'"))))))
 
-(defn contains-dir [a b]
-  (and (.contains b a) (> (count b) (count a))))
-
 (defn files-under [path file-tree]
-  (->> (filter
-        #(= (:type %) :file)
-        file-tree)
-       (filter
-        #(contains-dir path (:path %)))))
+  (->> (filter  #(= (:type %) :file) file-tree)
+       (filter #(str/starts-with? (:path %) path))))
 
 (defn get-dir-sizes [file-tree]
   (->> (reduce
         (fn [acc cur]
-          (if (= (:type cur) :file)
-            (update acc (:path cur)
-                    #(+ (or % 0) (:file-size cur)))
+          (if (= (:type cur) :dir)
+            (assoc acc (:path cur) 0)
             acc))
         {}
         file-tree)
@@ -109,11 +108,30 @@
        (filter #(< % 100000))
        (reduce + 0)))
 
-; 1112207 = too low
+(defn get-first-past [n coll]
+  (->> (sort coll)
+       (reduce
+        #(if (and (= %1 nil) (< n %2)) %2 %1)
+        nil)))
+
+(defn get-dir-deletion-target [dir-size-map]
+  (let [target-usage 40000000
+        current-usage (get dir-size-map "/")
+        space-needed (- current-usage  target-usage)]
+    (get-first-past space-needed (vals dir-size-map))))
 
 (defn part-2
   [input]
-  "Not implemented")
+  (->> (read-terminal input)
+       create-file-tree
+       ((fn [file-tree]
+          (let [dir-paths (->> (filter #(= (:type %) :dir) file-tree) (map :path))
+                files (filter #(= (:type %) :file) file-tree)]
+            (reduce
+             #(assoc %1 %2 (->> (files-under %2 files) (map :file-size) (reduce + 0)))
+             {}
+             dir-paths))))
+       get-dir-deletion-target))
 
 (def output
   {"Part One" (-> (slurp "resources/input/day_07.txt") part-1)
