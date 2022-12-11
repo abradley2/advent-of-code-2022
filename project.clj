@@ -29,7 +29,8 @@
                  [ring/ring-core "1.9.6"]
                  [ring/ring-defaults "0.3.4"]
                  [ring-cors "0.1.13"]
-                 [selmer "1.12.55"]]
+                 [selmer "1.12.55"]
+                 [ubergraph "0.8.2"]]
 
   :min-lein-version "2.0.0"
 
