@@ -10,7 +10,7 @@
 (defn create-rows [parsed-input]
   (map-indexed (fn [col-idx row]
                  (map-indexed (fn [row-idx col]
-                                {:x row-idx :y col-idx :height col}) row)) parsed-input))
+                                {:x row-idx :y col-idx :h col}) row)) parsed-input))
 
 (defn create-columns
   [rows]
@@ -33,8 +33,8 @@
         (recur
          (first next-trees)
          (rest next-trees)
-         (max prev-height (:height cur-tree))
-         (if (> (:height cur-tree) prev-height)
+         (max prev-height (:h cur-tree))
+         (if (> (:h cur-tree) prev-height)
            (cons cur-tree visible-trees)
            visible-trees)))))
 
@@ -46,16 +46,16 @@
     visible-trees '()]
     (if (nil? cur-tree) visible-trees
         (let [next-visible-trees
-              (if (or (> (:height cur-tree) prev-height)
-                      (and (= (:height cur-tree) prev-height) (< prev-height (:height pov-tree))))
+              (if (or (> (:h cur-tree) prev-height)
+                      (and (= (:h cur-tree) prev-height) (< prev-height (:h pov-tree))))
                 (cons cur-tree visible-trees)
                 visible-trees)]
-          (if (> (:height cur-tree) (:height pov-tree))
+          (if (> (:h cur-tree) (:h pov-tree))
             next-visible-trees
             (recur
              (first next-trees)
              (rest next-trees)
-             (max prev-height (:height cur-tree))
+             (max prev-height (:h cur-tree))
              next-visible-trees))))))
 
 (defn count-trees [tree-coll]
@@ -95,7 +95,7 @@
   [input]
   (let [tree-rows (-> (parse-input input) create-rows)
         tree-columns (create-columns tree-rows)
-        trees (flatten tree-rows)]
+        trees (flatten tree-columns)]
     (->> (map #(grade-tree % tree-rows tree-columns) trees)
          (apply max))))
 
