@@ -50,7 +50,7 @@
                       (and (= (:h cur-tree) prev-height) (< prev-height (:h pov-tree))))
                 (cons cur-tree visible-trees)
                 visible-trees)]
-          (if (> (:h cur-tree) (:h pov-tree))
+          (if (>= (:h cur-tree) (:h pov-tree))
             next-visible-trees
             (recur
              (first next-trees)
