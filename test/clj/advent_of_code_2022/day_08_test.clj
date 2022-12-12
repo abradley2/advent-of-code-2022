@@ -14,7 +14,15 @@
 33549
 35390")
 
+(t/deftest day-08-part-1-test
+  (t/testing "Sample"
+    (let [input sample-data]
+      (t/is (= 21 (day-08/part-1 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_08.txt")]
+      (t/is (= 1688 (day-08/part-1 input))))))
+
 (t/deftest day-08-part-2-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 21 (day-08/part-1 input))))))
+      (t/is (= 8 (day-08/part-2 input))))))
