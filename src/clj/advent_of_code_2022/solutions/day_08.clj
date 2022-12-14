@@ -42,20 +42,14 @@
   (loop
    [cur-tree (first tree-coll)
     next-trees (rest tree-coll)
-    prev-height -1
     visible-trees '()]
-    (if (nil? cur-tree) visible-trees
-        (let [next-visible-trees
-              (if (or (> (:h cur-tree) prev-height)
-                      (and (= (:h cur-tree) prev-height) (< prev-height (:h pov-tree))))
-                (cons cur-tree visible-trees)
-                visible-trees)]
+    (if (or (nil? cur-tree) (= cur-tree pov-tree)) visible-trees
+        (let [next-visible-trees (cons cur-tree visible-trees)]
           (if (>= (:h cur-tree) (:h pov-tree))
             next-visible-trees
             (recur
              (first next-trees)
              (rest next-trees)
-             (max prev-height (:h cur-tree))
              next-visible-trees))))))
 
 (defn count-trees [tree-coll]
@@ -98,8 +92,6 @@
         trees (flatten tree-columns)]
     (->> (map #(grade-tree % tree-rows tree-columns) trees)
          (apply max))))
-
-; 1470 == too low
 
 (def output
   {"Part One" (-> (slurp "resources/input/day_08.txt") part-1)

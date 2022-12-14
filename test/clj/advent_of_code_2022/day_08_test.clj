@@ -25,4 +25,7 @@
 (t/deftest day-08-part-2-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 8 (day-08/part-2 input))))))
+      (t/is (= 8 (day-08/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_08.txt")]
+      (t/is (= 410400 (day-08/part-2 input))))))
