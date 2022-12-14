@@ -71,7 +71,7 @@
   [input]
   (let [instructions (unfold-instructions (parse-input input))]
     (->> (loop
-          [rope '()
+          [rope []
            head {:x 0 :y 0 :root true}
            tail (repeat 9 {:x 0 :y 0})
            x (first instructions)
@@ -80,19 +80,14 @@
            (if (nil? x)
              visited
              (if (nil? head)
-               (recur '() (first (reverse rope)) (rest (reverse rope)) (first xs) (rest xs) visited)
+               (recur '() (first rope) (rest rope) (first xs) (rest xs) visited)
                (let [next-head (if (:root head) (move-head head x) head)
                      next-tail (cons (move-tail (first tail) next-head) (rest tail))
                      next-visited (set/union visited #{next-tail})]
                  (recur
-                ; add the head to our rope
-                  (cons next-head rope)
-                ; the next part of the tail is the new head
+                  (conj rope next-head)
                   (first next-tail)
-                ; the rest of the tail is the new tail
                   (rest next-tail)
-
-                ; only advance instructions if we are at the root
                   x
                   xs
                   next-visited)))))
