@@ -69,7 +69,34 @@
 
 (defn part-2
   [input]
-  "Not implemented")
+  (let [instructions (unfold-instructions (parse-input input))]
+    (->> (loop
+          [rope '()
+           head {:x 0 :y 0 :root true}
+           tail (repeat 9 {:x 0 :y 0})
+           x (first instructions)
+           xs (rest instructions)
+           visited #{}]
+           (if (nil? x)
+             visited
+             (if (nil? head)
+               (recur '() (first (reverse rope)) (rest (reverse rope)) (first xs) (rest xs) visited)
+               (let [next-head (if (:root head) (move-head head x) head)
+                     next-tail (cons (move-tail (first tail) next-head) (rest tail))
+                     next-visited (set/union visited #{next-tail})]
+                 (recur
+                ; add the head to our rope
+                  (cons next-head rope)
+                ; the next part of the tail is the new head
+                  (first next-tail)
+                ; the rest of the tail is the new tail
+                  (rest next-tail)
+
+                ; only advance instructions if we are at the root
+                  x
+                  xs
+                  next-visited)))))
+         count)))
 
 (def output
   {"Part One" (-> (slurp "resources/input/day_09.txt") part-1)
