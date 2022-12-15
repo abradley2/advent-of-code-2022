@@ -79,18 +79,16 @@
            visited #{}]
            (if (nil? x)
              visited
-             (if (nil? head)
-               (recur '() (first rope) (rest rope) (first xs) (rest xs) visited)
+             (if (nil? (first tail))
+               (recur []
+                      (first rope)
+                      (concat (rest rope) (list head))
+                      (first xs)
+                      (rest xs)
+                      (set/union visited #{head}))
                (let [next-head (if (:root head) (move-head head x) head)
-                     next-tail (cons (move-tail (first tail) next-head) (rest tail))
-                     next-visited (set/union visited #{next-tail})]
-                 (recur
-                  (conj rope next-head)
-                  (first next-tail)
-                  (rest next-tail)
-                  x
-                  xs
-                  next-visited)))))
+                     next-tail (cons (move-tail (first tail) next-head) (rest tail))]
+                 (recur (conj rope next-head) (first next-tail) (rest next-tail) x xs visited)))))
          count)))
 
 (def output
