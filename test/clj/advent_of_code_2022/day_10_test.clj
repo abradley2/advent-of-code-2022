@@ -156,4 +156,29 @@ noop")
 (t/deftest day-10-part-1-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 13140 (day-10/part-1 input))))))
+      (t/is (= 13140 (day-10/part-1 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_10.txt")]
+      (t/is (= 15020 (day-10/part-1 input))))))
+
+(def part-2-sample "##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....")
+
+(def part-2-actual "####.####.#..#..##..#....###...##..###..
+#....#....#..#.#..#.#....#..#.#..#.#..#.
+###..###..#..#.#....#....#..#.#..#.#..#.
+#....#....#..#.#.##.#....###..####.###..
+#....#....#..#.#..#.#....#....#..#.#....
+####.#.....##...###.####.#....#..#.#....")
+
+(t/deftest day-10-part-2-test
+  (t/testing "Sample"
+    (let [input sample-data]
+      (t/is (= part-2-sample (day-10/part-2 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_10.txt")]
+      (t/is (= part-2-actual (day-10/part-2 input))))))
