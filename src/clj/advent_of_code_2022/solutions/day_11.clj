@@ -2,16 +2,30 @@
   (:require
    [clojure.spec.alpha :as s]))
 
-(defn parse-trait [input] input)
+(defn parse-test [raw-test] raw-test)
 
-(defmacro make-op [_new _eq argA op argB] `((fn [old] (~op ~argA ~argB))))
+(defn run-operation [old op]
+  ((:fn op)
+   (if (= (:arg-1 op) :old) old (:arg-1 op))
+   (if (= (:arg-2 op) :old) old (:arg-2 op))))
 
+(defn parse-operation [raw-operation]
+  (as-> (re-matches #"\s*new\s*=\s*(old|\d+)\s*([\+\-\*]{1})\s*(old|\d+).*" raw-operation) matches
+    {:arg-1 (->> (get matches 1) (s/assert some?) (#(if (= % "old") :old (read-string %))))
+     :fn (read-string (s/assert some? (get matches 2)))
+     :arg-2 (->> (get matches 3) (s/assert some?) (#(if (= % "old") :old (read-string %))))}))
 
+(defn parse-trait [raw-trait]
+  (as-> (.split raw-trait ":") [name body]
+    (cond
+      (= name "Starting items") {:items (read-string (str "(" body ")"))}
+      (= name "Operation") {:operation (parse-operation body)}
+      (= name "Test") {:test (parse-test body)})))
 
-(defn parse-monkey [input]
-  (let [lines (.split input (str #"\n\s{2}(?=\w)"))
+(defn parse-monkey [raw-monkey]
+  (let [lines (.split raw-monkey (str #"\n\s{2}(?=\w)"))
         name (first lines)
-        traits (map parse-trait (rest lines))]
+        traits (->> (map parse-trait (rest lines)) (reduce merge {}))]
 
     {:name name :traits traits}))
 
