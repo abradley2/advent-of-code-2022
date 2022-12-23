@@ -40,7 +40,7 @@
 (defn parse-operation [raw-operation]
   (as-> (re-matches #"\s*new\s*=\s*(old|\d+)\s*([\+\-\*]{1})\s*(old|\d+).*" raw-operation) matches
     {:arg-1 (->> (get matches 1) (s/assert some?) (#(if (= % "old") :old (read-string %))))
-     :fn (read-string (s/assert some? (get matches 2)))
+     :fn (s/assert some? (-> (get matches 2) read-string eval))
      :arg-2 (->> (get matches 3) (s/assert some?) (#(if (= % "old") :old (read-string %))))}))
 
 (defn parse-trait [raw-trait]
@@ -54,7 +54,7 @@
   (let [lines (.split raw-monkey (str #"\n\s{2}(?=\w)"))
         id (re-find #"\d+" (first lines))
         traits (->> (map parse-trait (rest lines)) (reduce merge {}))]
-    (-> (merge {:id id} traits)
+    (-> (merge {:id id :inspection-count 0} traits)
         (#(merge % (:test %)))
         (#(dissoc % :test)))))
 
@@ -81,6 +81,7 @@
          (inc monkey-idx)
          (-> (reduce (fn [next-monkies item]
                        (resolve-item item monkey next-monkies)) monkies (:items monkey))
+             (update-in [monkey-idx :inspection-count] #(+ % (count (:items monkey))))
              (assoc-in [monkey-idx :items] '()))
          round)))))
 
@@ -91,7 +92,14 @@
 
 (defn part-1
   [input]
-  (-> (parse-input input) monkey-a-round))
+  (->>
+   (parse-input input)
+   monkey-a-round
+   (map :inspection-count)
+   sort
+   reverse
+   (take 2)
+   (apply *)))
 
 (defn part-2
   [_input]
