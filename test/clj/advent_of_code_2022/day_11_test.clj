@@ -41,4 +41,12 @@ Monkey 3:
 (t/deftest day-11-part-1-test
   (t/testing "Sample"
     (let [input sample-data]
-      (t/is (= 10605 (day-11/part-1 input))))))
+      (t/is (= 10605 (day-11/part-1 input)))))
+  (t/testing "Actual"
+    (let [input (slurp "resources/input/day_11.txt")]
+      (t/is (= 57348 (day-11/part-1 input))))))
+
+(t/deftest day-11-part-2-test
+  (t/testing "Sample"
+    (let [input sample-data]
+      (t/is (= 2713310158 (day-11/part-2 input))))))
